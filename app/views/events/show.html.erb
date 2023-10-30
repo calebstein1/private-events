@@ -16,3 +16,20 @@
 <p>
   <%= @event.description %>
 </p>
+<% if user_signed_in? %>
+  <% unless @event.attendees.ids.include?(current_user.id) %>
+    <%= form_with(model: AttendedEvent, url: attended_events_path) do |form| %>
+      <%= form.hidden_field :user_id, value: @current_user.id %>
+      <%= form.hidden_field :event_id, value: @event.id %>
+      <%= form.submit "Attend Event" %>
+    <% end %>
+  <% else %>
+    <p>You're attending this event!</p>
+  <% end %>
+<% end %>
+<h3>Who's going?</h3>
+<ul>
+  <% @event.attendees.each do |attendee| %>
+    <li><%= attendee.email %></li>
+  <% end %>
+</ul>

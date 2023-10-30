@@ -6,6 +6,7 @@ class EventsController < ApplicationController
 
   def show
     @event = Event.find(params[:id])
+    @user_id = current_user.id unless current_user.nil?
   end
 
   def new
