@@ -1,16 +1,12 @@
 <h3>Upcoming Events:</h3>
 <ul>
-  <% @events.each do |event| %>
-    <% if Date.parse(event.date).future? %>
-      <li><%= link_to event.name, event %></li>
-    <% end %>
+  <% @events.future.each do |event| %>
+    <li><%= link_to event.name, event %></li>
   <% end %>
 </ul>
 <h3>Past Events:</h3>
 <ul>
-  <% @events.each do |event| %>
-    <% if Date.parse(event.date).past? %>
-      <li><%= link_to event.name, event %></li>
-    <% end %>
+  <% @events.past.each do |event| %>
+    <li><%= link_to event.name, event %></li>
   <% end %>
 </ul>

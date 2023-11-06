@@ -18,7 +18,7 @@
 </p>
 <% if user_signed_in? %>
   <% unless @event.attendees.ids.include?(current_user.id) %>
-    <% if Date.parse(@event.date).future? %>
+    <% if @event.future? %>
       <%= form_with(model: AttendedEvent, url: attended_events_path) do |form| %>
         <%= form.hidden_field :user_id, value: @current_user.id %>
         <%= form.hidden_field :event_id, value: @event.id %>
@@ -28,14 +28,14 @@
       <p>Event has already passed!</p>
     <% end %>
   <% else %>
-    <% if Date.parse(@event.date).future? %>
+    <% if @event.future? %>
       <p>You're attending this event!</p>
     <% else %>
       <p>You attended this event!</p>
     <% end %>
   <% end %>
 <% end %>
-<% if Date.parse(@event.date).future? %>
+<% if @event.future? %>
   <h3>Who's going?</h3>
 <% else %>
   <h3>Who went?</h3>
