@@ -18,16 +18,28 @@
 </p>
 <% if user_signed_in? %>
   <% unless @event.attendees.ids.include?(current_user.id) %>
-    <%= form_with(model: AttendedEvent, url: attended_events_path) do |form| %>
-      <%= form.hidden_field :user_id, value: @current_user.id %>
-      <%= form.hidden_field :event_id, value: @event.id %>
-      <%= form.submit "Attend Event" %>
+    <% if Date.parse(@event.date).future? %>
+      <%= form_with(model: AttendedEvent, url: attended_events_path) do |form| %>
+        <%= form.hidden_field :user_id, value: @current_user.id %>
+        <%= form.hidden_field :event_id, value: @event.id %>
+        <%= form.submit "Attend Event" %>
+      <% end %>
+    <% else %>
+      <p>Event has already passed!</p>
     <% end %>
   <% else %>
-    <p>You're attending this event!</p>
+    <% if Date.parse(@event.date).future? %>
+      <p>You're attending this event!</p>
+    <% else %>
+      <p>You attended this event!</p>
+    <% end %>
   <% end %>
 <% end %>
-<h3>Who's going?</h3>
+<% if Date.parse(@event.date).future? %>
+  <h3>Who's going?</h3>
+<% else %>
+  <h3>Who went?</h3>
+<% end %>
 <ul>
   <% @event.attendees.each do |attendee| %>
     <li><%= attendee.email %></li>
