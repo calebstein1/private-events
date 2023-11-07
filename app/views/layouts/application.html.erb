@@ -11,7 +11,14 @@
   </head>
 
   <body>
-    <%= render 'public/nav' %>
-    <%= yield %>
+    <nav>
+      <%= render 'public/nav' %>
+      <%= yield %>
+    </nav>
+    <% if user_signed_in? %>
+      <turbo-frame class="container" id="_event-display" src="/users/<%= current_user.id %>"></turbo-frame>
+    <% else %>
+      <turbo-frame class="container" id="_event-display" src="/users/sign_in"></turbo-frame>
+    <% end %>
   </body>
 </html>

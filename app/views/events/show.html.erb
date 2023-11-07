@@ -1,47 +1,46 @@
-<p>
-  <%= link_to "Back to Events List", events_path %>
-</p>
-<p>
-  <%= @event.name %>
-</p>
-<p>
-  Created by <%= @event.creator.email %>
-</p>
-<p>
-  Date: <%= @event.date %>
-</p>
-<p>
-  Location: <%= @event.location %>
-</p>
-<p>
-  <%= @event.description %>
-</p>
-<% if user_signed_in? %>
-  <% unless @event.attendees.ids.include?(current_user.id) %>
-    <% if @event.future? %>
-      <%= form_with(model: AttendedEvent, url: attended_events_path) do |form| %>
-        <%= form.hidden_field :user_id, value: @current_user.id %>
-        <%= form.hidden_field :event_id, value: @event.id %>
-        <%= form.submit "Attend Event" %>
+<turbo-frame id="_event-display">
+  <p>
+    <h1><%= @event.name %></h1>
+  </p>
+  <p>
+    Created by <%= @event.creator.email %>
+  </p>
+  <p>
+    It's happening on <%= @event.date %>
+  </p>
+  <p>
+    It's happening at <%= @event.location %>
+  </p>
+  <p>
+    <%= @event.description %>
+  </p>
+  <% if user_signed_in? %>
+    <% unless @event.attendees.ids.include?(current_user.id) %>
+      <% if @event.future? %>
+        <%= form_with(model: AttendedEvent, url: attended_events_path) do |form| %>
+          <%= form.hidden_field :user_id, value: @current_user.id %>
+          <%= form.hidden_field :event_id, value: @event.id %>
+          <%= form.submit "Attend Event" %>
+        <% end %>
+      <% else %>
+        <p>Event has already passed!</p>
       <% end %>
     <% else %>
-      <p>Event has already passed!</p>
+      <% if @event.future? %>
+        <p>You're attending this event!</p>
+      <% else %>
+        <p>You attended this event!</p>
+      <% end %>
     <% end %>
+  <% end %>
+  <% if @event.future? %>
+    <h3>Who's going?</h3>
   <% else %>
-    <% if @event.future? %>
-      <p>You're attending this event!</p>
-    <% else %>
-      <p>You attended this event!</p>
+    <h3>Who went?</h3>
+  <% end %>
+  <ul>
+    <% @event.attendees.each do |attendee| %>
+      <li><%= attendee.email %></li>
     <% end %>
-  <% end %>
-<% end %>
-<% if @event.future? %>
-  <h3>Who's going?</h3>
-<% else %>
-  <h3>Who went?</h3>
-<% end %>
-<ul>
-  <% @event.attendees.each do |attendee| %>
-    <li><%= attendee.email %></li>
-  <% end %>
-</ul>
+  </ul>
+</turbo-frame>

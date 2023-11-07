@@ -1,26 +1,25 @@
-<p>
-  <%= link_to "Back to Events List", events_path %>
-</p>
-<% if @user.id == current_user.id %>
-  <p>Profile for <%= @user.email %></p>
-  <p>Events you created:</p>
-  <ul>
-    <% @user.events.each do |event| %>
-      <li><%= link_to event.name, event %></li>
-    <% end %>
-  </ul>
-  <p>Events you're attending:</p>
-  <ul>
-    <% @user.user_attended_events.future.each do |event| %>
-      <li><%= link_to event.name, event %></li>
-    <% end %>
-  </ul>
-  <p>Events you've attended:</p>
-  <ul>
-    <% @user.user_attended_events.past.each do |event| %>
-      <li><%= link_to event.name, event %></li>
-    <% end %>
-  </ul>
-<% else %>
-  <p>You're not signed in as this user!</p>
-<% end %>
+<turbo-frame id="_event-display">
+  <% if @user.id == current_user.id %>
+    <p>Profile for <%= @user.email %></p>
+    <p>Events you created:</p>
+    <ul>
+      <% @user.events.each do |event| %>
+        <li><%= link_to event.name, event %></li>
+      <% end %>
+    </ul>
+    <p>Events you're attending:</p>
+    <ul>
+      <% @user.user_attended_events.future.each do |event| %>
+        <li><%= link_to event.name, event %></li>
+      <% end %>
+    </ul>
+    <p>Events you've attended:</p>
+    <ul>
+      <% @user.user_attended_events.past.each do |event| %>
+        <li><%= link_to event.name, event %></li>
+      <% end %>
+    </ul>
+  <% else %>
+    <p>You're not signed in as this user!</p>
+  <% end %>
+</turbo-frame>
